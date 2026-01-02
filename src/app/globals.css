@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  line-height: 1.6;
+  color: #1a1a1a;
+}
+
+@layer components {
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-center mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-gray-600 text-center mb-12 text-lg;
+  }
+
+  .cta-button {
+    @apply bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-4 px-8 rounded-lg
+    shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300
+    text-lg cursor-pointer;
+  }
+
+  .cta-button-outline {
+    @apply border-2 border-amber-500 text-amber-600 font-bold py-4 px-8 rounded-lg
+    hover:bg-amber-500 hover:text-white transition-all duration-300
+    text-lg cursor-pointer;
+  }
+}
+
+/* 부드러운 스크롤 애니메이션 */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5a47e;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a88a5e;
+}
