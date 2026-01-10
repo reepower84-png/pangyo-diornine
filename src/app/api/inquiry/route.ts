@@ -1,6 +1,71 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+// Discord 웹훅으로 알림 전송
+async function sendDiscordNotification(name: string, phone: string, inquiry: string) {
+  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+
+  if (!webhookUrl) {
+    console.error("Discord webhook URL이 설정되지 않았습니다.");
+    return;
+  }
+
+  const now = new Date();
+  const koreanTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+  const formattedDate = koreanTime.toISOString().replace('T', ' ').substring(0, 19);
+
+  const embed = {
+    embeds: [
+      {
+        title: "📋 새로운 상담 신청이 접수되었습니다!",
+        color: 0xD4AF37,
+        fields: [
+          {
+            name: "👤 이름",
+            value: name,
+            inline: true
+          },
+          {
+            name: "📞 연락처",
+            value: phone,
+            inline: true
+          },
+          {
+            name: "💬 문의내용",
+            value: inquiry || "내용 없음",
+            inline: false
+          },
+          {
+            name: "🕐 접수시간",
+            value: formattedDate + " (KST)",
+            inline: false
+          }
+        ],
+        footer: {
+          text: "판교디오르나인"
+        },
+        timestamp: new Date().toISOString()
+      }
+    ]
+  };
+
+  try {
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(embed),
+    });
+
+    if (!response.ok) {
+      console.error("Discord 알림 전송 실패:", response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error("Discord 알림 전송 중 오류:", error);
+  }
+}
+
 // POST: 새 문의 추가
 export async function POST(request: NextRequest) {
   try {
@@ -35,6 +100,9 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Discord 알림 전송 (await로 완료 대기)
+    await sendDiscordNotification(name, phone, inquiry || "");
 
     return NextResponse.json(
       { message: "상담 신청이 완료되었습니다.", data },
