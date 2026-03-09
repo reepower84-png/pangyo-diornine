@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Old data files
 /data/
+
+.vercel
+.env*.local
