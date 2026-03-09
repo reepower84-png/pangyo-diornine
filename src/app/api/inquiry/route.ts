@@ -66,7 +66,7 @@ async function sendDiscordNotification(name: string, phone: string, inquiry: str
   }
 }
 
-// POST: 새 문의 추가
+// POST: 새 문의 추가 (Discord 다이렉트 알림)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -80,32 +80,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabase
-      .from('inquiries')
-      .insert([
-        {
-          name,
-          phone,
-          inquiry: inquiry || "",
-          status: "new"
-        }
-      ])
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Supabase error:", error);
-      return NextResponse.json(
-        { error: "데이터 저장 중 오류가 발생했습니다." },
-        { status: 500 }
-      );
-    }
-
-    // Discord 알림 전송 (await로 완료 대기)
+    // Discord 알림 직접 전송
     await sendDiscordNotification(name, phone, inquiry || "");
 
     return NextResponse.json(
-      { message: "상담 신청이 완료되었습니다.", data },
+      { message: "상담 신청이 완료되었습니다." },
       { status: 201 }
     );
   } catch (error) {
