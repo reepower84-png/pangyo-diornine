@@ -35,16 +35,14 @@ export default function FloatingCTA({ onClick }: FloatingCTAProps) {
         <span className="font-bold">상담 신청</span>
       </button>
 
-      {/* 카카오톡 상담 플로팅 버튼 */}
+      {/* 카카오톡 상담 플로팅 버튼 - 항상 표시 */}
       <a
         href="http://pf.kakao.com/_TxaaZX/chat"
         target="_blank"
         rel="noopener noreferrer"
         className={`fixed right-6 z-50 w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 overflow-hidden ${
-          isVisible
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-10 pointer-events-none"
-        } md:bottom-24 bottom-28`}
+          isVisible ? "md:bottom-24 bottom-28" : "bottom-6"
+        }`}
       >
         <Image
           src="/images/카톡_원형_로고.png"
