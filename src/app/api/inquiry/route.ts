@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
 
 // Discord 웹훅으로 알림 전송
 async function sendDiscordNotification(name: string, phone: string, inquiry: string) {
@@ -99,6 +98,7 @@ export async function POST(request: NextRequest) {
 // GET: 모든 문의 조회
 export async function GET() {
   try {
+    const { supabase } = await import("@/lib/supabase");
     const { data, error } = await supabase
       .from('inquiries')
       .select('*')
@@ -135,6 +135,7 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    const { supabase } = await import("@/lib/supabase");
     const { data, error } = await supabase
       .from('inquiries')
       .update({ status })
@@ -173,6 +174,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    const { supabase } = await import("@/lib/supabase");
     const { error } = await supabase
       .from('inquiries')
       .delete()
